@@ -5,6 +5,7 @@ use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\WishlistController;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Banner;
@@ -84,9 +85,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout.process');
     Route::post('checkout/shipping/{orderId}', [ShippingController::class, 'updateShippingInfo'])->name('checkout.shipping.update');
     Route::post('checkout/payment', [PaymentController::class, 'processPayment'])->name('checkout.process-payment');
-    Route::get('wishlist', function () {
-        return Inertia::render('wishlist/index');
-    })->name('wishlist');
+    Route::controller(WishlistController::class)->prefix('wishlist')->group(function () {
+        Route::get('/', 'index')->name('wishlist.index');
+        Route::post('/toggle', 'toggle')->name('wishlist.toggle');
+    });
 });
 
 Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');

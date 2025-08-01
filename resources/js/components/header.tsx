@@ -36,9 +36,9 @@ export function Header() {
                         <motion.div
                             whileHover={{ rotate: 360 }}
                             transition={{ duration: 0.5 }}
-                            className="rounded-full bg-gradient-to-r from-pink-500 to-violet-500 p-2"
+                            className="rounded-full bg-gradient-to-r from-pink-500 to-violet-500"
                         >
-                            <ShoppingBag className="h-6 w-6 text-white" />
+                            <img src="/favicon.svg" alt="Logo" className="h-12 w-full rounded-full" />
                         </motion.div>
                         <span className="bg-gradient-to-r from-pink-600 to-violet-600 bg-clip-text text-xl font-bold text-transparent">{name}</span>
                     </Link>

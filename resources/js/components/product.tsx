@@ -56,7 +56,7 @@ export function ProductCard({ product, index }: ProductProps) {
         });
     };
     const toggleWishlist = (id: number) => {
-        router.post('/wishlist/toggle', { product_id: id });
+        router.post(route('wishlist.toggle'), { product_id: id });
     };
     return (
         <motion.div

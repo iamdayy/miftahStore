@@ -1,4 +1,5 @@
-import { Link } from '@inertiajs/react';
+import { SharedData } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
 import { motion, Variants } from 'framer-motion';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -24,6 +25,16 @@ const itemVariants: Variants = {
     },
 };
 export function Footer() {
+    const { categories, name, quote } = usePage<SharedData>().props;
+    const links = [
+        { title: 'Home', href: '/', isActive: route().current('home') },
+        { title: 'Products', href: '/products', isActive: route().current('products.index') },
+        ...categories.map((category) => ({
+            title: category.name,
+            href: route('products.category', { category: category.id }),
+            isActive: route().current('products.category', { category: category.id }),
+        })),
+    ];
     return (
         <motion.footer
             className="relative mt-16 overflow-hidden py-12"
@@ -45,18 +56,14 @@ export function Footer() {
                     viewport={{ once: true }}
                 >
                     <motion.div variants={itemVariants}>
-                        <h3 className="mb-4 text-xl font-semibold">FashionStore</h3>
-                        <p className="text-sm text-white/80">Your destination for the latest fashion trends and styles.</p>
+                        <h3 className="mb-4 text-xl font-semibold">{name}</h3>
+                        <p className="text-sm text-white/80">{quote.message}</p>
                     </motion.div>
 
                     {[
                         {
-                            title: 'Quick Links',
-                            links: ['About Us', 'Contact', 'Shipping Info', 'Returns'],
-                        },
-                        {
                             title: 'Categories',
-                            links: ['Men', 'Women', 'Accessories', 'Shoes'],
+                            links,
                         },
                     ].map((section, index) => (
                         <motion.div key={index} variants={itemVariants}>
@@ -64,14 +71,14 @@ export function Footer() {
                             <ul className="space-y-2 text-sm">
                                 {section.links.map((link, linkIndex) => (
                                     <motion.li
-                                        key={link}
+                                        key={linkIndex}
                                         initial={{ opacity: 0, x: -20 }}
                                         whileInView={{ opacity: 1, x: 0 }}
                                         transition={{ delay: linkIndex * 0.1 }}
                                         whileHover={{ x: 5 }}
                                     >
-                                        <Link href="#" className="text-white/80 transition-colors hover:text-white">
-                                            {link}
+                                        <Link href={link.href} className={`text-white/80 hover:text-white ${link.isActive ? 'font-semibold' : ''}`}>
+                                            {link.title}
                                         </Link>
                                     </motion.li>
                                 ))}
@@ -97,7 +104,9 @@ export function Footer() {
                     whileInView={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
                 >
-                    <p>&copy; 2024 FashionStore. All rights reserved.</p>
+                    <p>
+                        &copy; {new Date().getFullYear()} {name}. All rights reserved.
+                    </p>
                 </motion.div>
             </div>
         </motion.footer>
