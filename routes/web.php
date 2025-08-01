@@ -23,9 +23,9 @@ Route::get('/', function () {
     $banners = Banner::with(['product', 'product.category'])->latest()->get();
     $discounts = Discount::where('status', 'active')->get();
     return Inertia::render('home', [
-        'products' => $products,
-        'banners' => $banners,
-        'discounts' => $discounts,
+        'products' => $products ?? [],
+        'banners' => $banners ?? [],
+        'discounts' => $discounts ?? [],
     ]);
 })->name('home');
 Route::prefix('products')->group(function () {

@@ -87,11 +87,11 @@ export interface Banner {
     title: string;
     description: string;
     image: string;
-    product: Product;
+    product?: Product;
 }
 
 export interface CartItem {
-    product: Product;
+    product?: Product;
     quantity: number;
 }
 
