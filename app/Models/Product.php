@@ -31,6 +31,11 @@ class Product extends Model
         return $this->belongsToMany(Order::class, 'items_orders')->withPivot('quantity');
     }
 
+    public function reviews()
+    {
+        return $this->orders()->withPivot('review');
+    }
+
     public function scopeAvailable($query)
     {
         return $query->where('stock', '>', 0);

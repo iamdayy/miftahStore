@@ -48,8 +48,23 @@ Route::prefix('products')->group(function () {
 
     Route::get('/{product}', function ($id) {
         $product = Product::with('category')->findOrFail($id);
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->with('category')
+            ->latest()
+            ->limit(4)
+            ->get();
+        $wishlistItems = Wishlist::where('user_id', Auth::id())
+            ->where('product_id', $product->id)
+            ->exists();
+        $cartItems = Cart::where('user_id', Auth::id())
+            ->where('product_id', $product->id)
+            ->exists();
         return Inertia::render('products/show', [
-            'product' => $product
+            'product' => $product,
+            'relatedProducts' => $relatedProducts,
+            'wishlistItems' => $wishlistItems,
+            'cartItems' => $cartItems
         ]);
     })->name('products.show');
 });

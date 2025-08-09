@@ -3,7 +3,7 @@ import { formatPrice } from '@/utils/exports';
 import { Link, router } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from './ui/button';
 
 interface HeroSectionProps {
@@ -11,9 +11,9 @@ interface HeroSectionProps {
 }
 export function HeroSection({ banners }: HeroSectionProps) {
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-    const nextBanner = () => {
+    const nextBanner = useCallback(() => {
         setCurrentBannerIndex((prev) => (prev + 1) % banners.length);
-    };
+    }, [banners.length]);
     const prevBanner = () => {
         setCurrentBannerIndex((prev) => (prev - 1 + banners.length) % banners.length);
     };
@@ -26,7 +26,7 @@ export function HeroSection({ banners }: HeroSectionProps) {
     useEffect(() => {
         const interval = setInterval(nextBanner, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [banners.length, nextBanner]);
     return (
         // {/* Banner Carousel Section */}
         <section className="relative h-[600px] overflow-hidden">
@@ -64,23 +64,23 @@ export function HeroSection({ banners }: HeroSectionProps) {
                                         {/* Featured Product Info */}
                                         <div className="mb-8 flex items-center gap-4 rounded-lg border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
                                             <img
-                                                src={'/storage/' + banners[currentBannerIndex].product.photo || '/placeholder.svg'}
-                                                alt={banners[currentBannerIndex].product.name}
+                                                src={'/storage/' + banners[currentBannerIndex].product?.photo || '/placeholder.svg'}
+                                                alt={banners[currentBannerIndex].product?.name}
                                                 width={80}
                                                 height={80}
                                                 className="rounded-lg object-cover"
                                             />
                                             <div>
-                                                <h3 className="text-lg font-semibold">{banners[currentBannerIndex].product.name}</h3>
-                                                <p className="mb-1 text-sm text-white/80">{banners[currentBannerIndex].product.category.name}</p>
+                                                <h3 className="text-lg font-semibold">{banners[currentBannerIndex].product?.name}</h3>
+                                                <p className="mb-1 text-sm text-white/80">{banners[currentBannerIndex].product?.category.name}</p>
                                                 <p className="text-2xl font-bold text-yellow-400">
-                                                    {formatPrice(banners[currentBannerIndex].product.price)}
+                                                    {formatPrice(banners[currentBannerIndex].product?.price || 0)}
                                                 </p>
                                             </div>
                                         </div>
 
                                         <div className="flex gap-4">
-                                            <Link href={`/product/${banners[currentBannerIndex].product.id}`}>
+                                            <Link href={`/products/${banners[currentBannerIndex].product?.id}`}>
                                                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                                     <Button
                                                         size="lg"
@@ -97,7 +97,7 @@ export function HeroSection({ banners }: HeroSectionProps) {
                                                     size="lg"
                                                     variant="outline"
                                                     className="border-white bg-transparent text-white hover:bg-white hover:text-purple-600"
-                                                    onClick={() => addToCart(banners[currentBannerIndex].product.id)}
+                                                    onClick={() => addToCart(banners[currentBannerIndex].product?.id || 0)}
                                                 >
                                                     <ShoppingBag className="mr-2 h-4 w-4" />
                                                     Tambah ke Keranjang

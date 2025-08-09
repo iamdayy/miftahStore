@@ -195,7 +195,7 @@ export function ProductCard({ product, index }: ProductProps) {
                                     disabled={product.stock === 0}
                                 >
                                     <motion.span
-                                        animate={cartItems?.find((c) => c.product.id === product.id) ? { x: [0, -100, 100, 0] } : {}}
+                                        animate={cartItems?.find((c) => c.product?.id === product.id) ? { x: [0, -100, 100, 0] } : {}}
                                         transition={{ duration: 0.5 }}
                                     >
                                         {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
@@ -203,7 +203,7 @@ export function ProductCard({ product, index }: ProductProps) {
                                     <motion.div
                                         className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-emerald-500 to-teal-500"
                                         initial={{ x: '100%' }}
-                                        animate={cartItems?.find((c) => c.product.id === product.id) ? { x: 0 } : { x: '100%' }}
+                                        animate={cartItems?.find((c) => c.product?.id === product.id) ? { x: 0 } : { x: '100%' }}
                                         transition={{ duration: 0.3 }}
                                     >
                                         ✓ Added!
